@@ -1,0 +1,5 @@
+html:not(.android-device) {
+    * {
+        text-rendering: geometricPrecision;
+    }
+}
