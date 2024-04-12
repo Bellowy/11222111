@@ -1,81 +1,103 @@
 var gulp = require('gulp'),
+    pug = require('gulp-pug'),
     prefixer = require('gulp-autoprefixer'),
     uglify = require('gulp-uglify'),
     sass = require('gulp-sass'),
-    include = require('gulp-include'),
+    rigger = require('gulp-rigger'),
     cleanCSS = require('gulp-clean-css'),
-    runSequence = require('run-sequence'),
+    cache = require('gulp-cache'),
     browserSync = require('browser-sync');
 
-var PATH = {
-    BUILD: 'build/',
-    SRC: {
-        HTML: 'src/**/*.html',
-        STYLE: 'src/**/main.scss',
-        IMG: 'src/**/images/**/*.*',
-        FONTS: 'src/**/fonts/**/*.*'
+var path = {
+    build: {
+        html: 'build/',
+        js: 'build/',
+        css: 'build/',
+        img: 'build/',
+        fonts: 'build/fonts/'
     },
-    WATCH: {
-        HTML: 'src/**/*.html',
-        STYLE: 'src/**/*.scss',
-        IMG: 'src/**/images/**/*.*',
-        FONTS: 'src/**/fonts/**/*.*'
+    src: {
+        html: 'src/**/*.pug',
+        js: 'src/**/main.js',
+        style: 'src/**/main.scss',
+        img: 'src/**/images/**/*.*',
+        fonts: 'src/fonts/**/*.*'
+    },
+    watch: {
+        html: 'src/**/*.pug',
+        js: 'src/**/*.js',
+        style: 'src/**/*.scss',
+        img: 'src/**/images/**/*.*',
+        fonts: 'src/fonts/**/*.*'
     },
 };
 
-var INCLUDE_CONFIG = {
-    extensions: 'html',
-    includePaths: [ __dirname + '/src' ],
-};
-
-var WEB_SERVER_CONFIG = {
-    server: { baseDir: PATH.BUILD },
+var config = {
+    server: {
+        baseDir: './build'
+    },
     host: 'localhost',
     port: 9000,
     logPrefix: 'test'
 };
 
-gulp.task('webserver', function() {
-    browserSync(WEB_SERVER_CONFIG);
+gulp.task('webserver', function () {
+    browserSync(config);
 });
 
-gulp.task('html:build:dev', function() {
-    return gulp.src(PATH.SRC.HTML)
-        .pipe(include(INCLUDE_CONFIG))
-            .on('error', console.log)
-        .pipe(gulp.dest(PATH.BUILD))
+gulp.task('html:build', function () {
+    return gulp.src(path.src.html)
+        .pipe(pug())
+        .pipe(gulp.dest(path.build.html));
+});
+
+gulp.task('js:build', function () {
+    return gulp.src(path.src.js)
+        .pipe(rigger())
+        .pipe(uglify())
+        .pipe(gulp.dest(path.build.js))
         .pipe(browserSync.stream());
 });
 
-gulp.task('style:build:dev', function() {
-    return gulp.src(PATH.SRC.STYLE)
-        .pipe(sass({ errLogToConsole: true }))
+gulp.task('style:build', function () {
+    return gulp.src(path.src.style)
+        .pipe(sass({
+            errLogToConsole: true
+        }))
         .pipe(prefixer())
         .pipe(cleanCSS())
-        .pipe(gulp.dest(PATH.BUILD))
+        .pipe(gulp.dest(path.build.css))
         .pipe(browserSync.stream());
+});
+
+gulp.task('image:build', function() {
+    return gulp.src(path.src.img).pipe(gulp.dest(path.build.img));
+});
+
+gulp.task('clear', function (done) {
+    return cache.clearAll(done);
 });
 
 gulp.task('fonts:build', function() {
-    return gulp.src(PATH.SRC.FONTS).pipe(gulp.dest(PATH.BUILD));
+    return gulp.src(path.src.fonts)
+        .pipe(gulp.dest(path.build.fonts))
 });
 
-gulp.task('image:build:dev', function() {
-    return gulp.src(PATH.SRC.IMG).pipe(gulp.dest(PATH.BUILD));
-});
-
-gulp.task('build-dev', [
+gulp.task('build', [
+    'html:build',
+    'js:build',
+    'style:build',
     'fonts:build',
-    'html:build:dev',
-    'style:build:dev',
-    'image:build:dev'
+    'clear',
+    'image:build'
 ]);
 
 gulp.task('watch', function(){
-    gulp.watch(PATH.WATCH.HTML, ['html:build:dev']);
-    gulp.watch(PATH.WATCH.STYLE, ['style:build:dev']);
-    gulp.watch(PATH.WATCH.IMG, ['image:build:dev']);
-    gulp.watch(PATH.WATCH.FONTS, ['fonts:build']);
+    gulp.watch(path.watch.html, ['html:build']);
+    gulp.watch(path.watch.style, ['style:build']);
+    gulp.watch(path.watch.js, ['js:build']);
+    gulp.watch(path.watch.img, ['image:build']);
+    gulp.watch(path.watch.fonts, ['fonts:build']);
 });
 
-gulp.task('dev', ['build-dev', 'webserver', 'watch']);
+gulp.task('default', ['build', 'webserver', 'watch']);

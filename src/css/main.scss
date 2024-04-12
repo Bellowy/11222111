@@ -1,9 +1,10 @@
-@import "lib/bootstrap";
 @import "partials/variables";
-@import "partials/mixins";
 @import "partials/fonts";
-@import "partials/header";
+@import "partials/footer";
 @import "partials/base-style";
-@import "partials/index";
 @import "partials/reset.css";
-@import "partials/animate";
+@import "partials/welcome_block.scss";
+@import "partials/party_block.scss";
+@import "partials/additional_block.scss";
+@import "partials/market_block.scss";
+@import "partials/pre_footer_block.scss";
