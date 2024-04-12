@@ -1,27 +1,20 @@
 @font-face {
-    font-family: 'Montserrat';
-    src: url('/fonts/Montserrat-Bold.ttf') format("truetype");
-    font-weight: 700;
+    font-family: "TheArtistSans";
+    src: url("/fonts/TheArtistSans.otf") format('truetype');
     font-style: normal;
-}
-
-@font-face {
-    font-family: 'Montserrat';
-    src: url('/fonts/Montserrat-Regular.ttf') format("truetype");
     font-weight: 400;
-    font-style: normal;
 }
 
 @font-face {
-    font-family: 'OpenSans';
-    src: url('/fonts/OpenSans-Regular.ttf') format("truetype");
+    font-family: "TheFontGatsby";
+    src: url("/fonts/TheFontGatsby.woff") format('truetype');
+    font-style: normal;
     font-weight: 400;
-    font-style: normal;
 }
 
 @font-face {
-    font-family: 'OpenSans';
-    src: url('/fonts/OpenSans-SemiBold.ttf') format("truetype");
-    font-weight: 600;
+    font-family: "Montserrat-Regular";
+    src: url("/fonts/Montserrat-Regular.ttf") format('truetype');
     font-style: normal;
+    font-weight: 400;
 }

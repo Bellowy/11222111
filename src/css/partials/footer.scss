@@ -1,0 +1,11 @@
+.footer {
+  position: relative;
+  height: 455px;
+  overflow: hidden;
+  background: url(/images/footer-svg.svg) 50%/cover no-repeat;
+  margin-top: 25px;
+
+  @media (max-width: $big-mobile_width) {
+    height: 200px;
+  }
+}

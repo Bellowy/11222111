@@ -1,0 +1,33 @@
+.welcome {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  background: url(/images/welcome_background.png) 50%/cover no-repeat;
+
+  &__container {
+    text-align: center;
+
+    .welcome__text_item {
+      position: relative;
+      z-index: -1;
+
+      .welcome__action-name {
+        font-size: 80px;
+        line-height: 1;
+        font-family: $TheFontGatsby, sans-serif;
+        letter-spacing: .45em;
+        color: $color_EFC18E;
+        text-shadow: 0 4px 100px $shadow_welcome;
+        margin: 30px 0;
+
+        @media (max-width: $ipad_width) {
+          font-size: 50px;
+        }
+
+        @media (max-width: $big-mobile_width) {
+          font-size: 28px;
+        }
+      }
+    }
+  }
+}
